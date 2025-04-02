@@ -2,7 +2,7 @@ import Footer from "./footer";
 import Header from "./header";
 import OurStory_description from "./Our_story_description";
 
-
+//impoerryty
 function OurStory_page()
 {
     return(
