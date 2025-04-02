@@ -1,11 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
-import { FaHeart, FaLock } from "react-icons/fa";
+import { FaHeart, FaLock} from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const EventCard3 = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+
   const eventData = [
     {
-      image: "Images/we-4.jpg", // Replace with actual image path
+      image: "Images/we-4.jpg",
       price: "Rs. 3300/-",
       name: "OCCASION LEHENGA CHOLI",
       fabric: "TUSSAR SILK",
@@ -13,7 +16,7 @@ const EventCard3 = () => {
       size: "FREE SIZE",
     },
     {
-      image: "Images/we-3.jpg", // Replace with actual image path
+      image: "Images/we-3.jpg",
       price: "Rs. 3300/-",
       name: "OCCASION LEHENGA CHOLI",
       fabric: "TUSSAR SILK",
@@ -24,7 +27,9 @@ const EventCard3 = () => {
 
   return (
     <div className="container mt-4">
-      <h4 className="text-center py-2" style={{ backgroundColor: "#541222", color: "white" }}>NAVARATRI SPECIAL CATEGORIES</h4>
+      <h4 className="text-center py-2" style={{ backgroundColor: "#541222", color: "white" }}>
+        NAVARATRI SPECIAL CATEGORIES
+      </h4>
       {eventData.map((event, index) => (
         <Card className="mb-3" key={index}>
           <div className="row g-0 align-items-center">
@@ -46,9 +51,10 @@ const EventCard3 = () => {
                   <button className="btn btn-outline-danger">
                     <FaHeart />
                   </button>
-                  <button className="btn btn-outline-secondary">
+                  <button className="btn btn-outline-secondary"  onClick={() => navigate("/CategoriesBookingPage")}>
                     <FaLock />
                   </button>
+                  
                 </div>
               </Card.Body>
             </div>
