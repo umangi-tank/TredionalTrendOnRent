@@ -30,42 +30,42 @@ import AdminProfile from "./ADMIN/AdminProfile";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/OurStory_page" element={<OurStory_page />} />
-        <Route path="/Login_page" element={<Login_page />} />
-        <Route path="/Our_team_page" element={<Our_team_page/>} />
-        <Route path="/Contact_us" element={<Contact_us/>} />
-        <Route path="Our_story_description" element={<OurStory_description/>} />
-        <Route path="/admin_login" element={<Admin_login />}/>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/ForgetPasswordPage" element={<ForgetPasswordPage />} />
-        <Route path="/Admin_dashboard_page" element={<Admin_dashboard_page />} />
-        <Route path="/AddCollection_page" element={<AddCollection_page />} />
-        <Route path="/UserRegistrationPage" element={<UserRegistrationPage />} />
-        <Route path="/PaymentHistoryPage" element={<PaymentHistoryPage />} />
-        <Route path="/ManageCollectionPage" element={<ManageCollectionPage />} />
-        <Route path="/CustomerBookingPage" element={<CustomerBookingPage />} />
-        <Route path="/EditBookingPage" element={<EditBookingPage/>} />
-        <Route path="/WeDellinPage" element={<WeDellinPage/>} />
-        <Route path="/AfterDashboardPage" element={<AfterDashboardPage/>} />
-        <Route path="/AWeDellInPage" element={<AWeDellInPage/>} />
-        <Route path="/EventCategoriesPage1" element={<EventCategoriesPage1/>} />
-        <Route path="/EventCategoriesPage2" element={<EventCategoriesPage2/>} />
-        <Route path="/EventCategoriesPage3" element={<EventCategoriesPage3/>} />
-        <Route path="/MyBookingPage" element={<MyBookingPage/>} />
-        <Route path="/WhishListPage" element={<WhishListPage/>} />
-        <Route path="/CategoriesBookingPage" element={<CategoriesBookingPage/>} />
-        <Route path="/UserProfilePage" element={<UserProfilePage/>} />
-        <Route path="/EditCollectionPage" element={<EditCollectionPage/>} />
-        <Route path="/AdminProfile" element={<AdminProfile/>} />
+    
+      <Router>
+       
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/OurStory_page" element={<OurStory_page />} />
+          <Route path="/Login_page" element={<Login_page />} />
+          <Route path="/Our_team_page" element={<Our_team_page/>} />
+          <Route path="/Contact_us" element={<Contact_us/>} />
+          <Route path="Our_story_description" element={<OurStory_description/>} />
+          <Route path="/admin_login" element={<Admin_login />}/>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/ForgetPasswordPage" element={<ForgetPasswordPage />} />
+          <Route path="/Admin_dashboard_page" element={<Admin_dashboard_page />} />
+          <Route path="/AddCollection_page" element={<AddCollection_page />} />
+          <Route path="/UserRegistrationPage" element={<UserRegistrationPage />} />
+          <Route path="/PaymentHistoryPage" element={<PaymentHistoryPage />} />
+          <Route path="/ManageCollectionPage" element={<ManageCollectionPage />} />
+          <Route path="/CustomerBookingPage" element={<CustomerBookingPage />} />
+          <Route path="/EditBookingPage" element={<EditBookingPage/>} />
+          <Route path="/WeDellinPage" element={<WeDellinPage/>} />
+          <Route path="/AfterDashboardPage" element={<AfterDashboardPage/>} />
+          <Route path="/AWeDellInPage" element={<AWeDellInPage/>} />
+          <Route path="/EventCategoriesPage1" element={<EventCategoriesPage1/>} />
+          <Route path="/EventCategoriesPage2" element={<EventCategoriesPage2/>} />
+          <Route path="/EventCategoriesPage3" element={<EventCategoriesPage3/>} />
+          <Route path="/MyBookingPage" element={<MyBookingPage/>} />
+          <Route path="/WhishListPage" element={<WhishListPage/>} />
+          <Route path="/CategoriesBookingPage" element={<CategoriesBookingPage/>} />
+          <Route path="/UserProfilePage" element={<UserProfilePage/>} />
+          <Route path="/EditCollectionPage" element={<EditCollectionPage/>} />
+          <Route path="/AdminProfile" element={<AdminProfile/>} />
 
-
-
-        
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    
   );
 }
 

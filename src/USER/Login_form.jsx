@@ -1,51 +1,89 @@
+/* eslint-disable no-undef */
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const Login_Form = () => {
+const LoginForm = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" }); // Using email as identifier
   const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Handle input change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear error when user types
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    setGeneralError(""); // Clear general error on input change
   };
 
-  // Form validation function
   const validateForm = () => {
     let newErrors = {};
-    if (!formData.username.trim()) newErrors.username = "Username is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    // Basic email validation (you might want a more robust one)
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
     if (!formData.password.trim()) newErrors.password = "Password is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Returns true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Handle login
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    if (!validateForm()) return; // Stop submission if validation fails
+    if (!validateForm()) return;
 
-    // Fake authentication check (replace with real logic)
-    if (formData.username === "umangi" && formData.password === "123456") {
-      navigate("/AfterDashboardPage");
-    } else {
-      setErrors({ general: "Invalid username or password" });
+    setLoading(true);
+    try {
+      const backendPort = process.env.PORT || 5000;
+      const backendBaseUrl = process.env.MONGODB_URI || 'http://localhost';
+      const apiUrl = `${backendBaseUrl}:${backendPort}/api/auth/login`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      });
+
+      console.log("Full Login Response:", response); // Log the entire response object
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error("Backend responded with non-JSON:", text);
+        setGeneralError("Backend responded with an unexpected format. Check the server logs.");
+      } else {
+        const data = await response.json();
+        console.log("Login Data:", data); // Log the parsed JSON data
+        setLoading(false);
+
+        if (response.ok) {
+          localStorage.setItem('authToken', data.token);
+          navigate("/AfterDashboardPage");
+        } else {
+          setGeneralError(data.message || "Invalid login credentials");
+        }
+      }
+    } catch (error) {
+      console.error("Login failed (fetch error):", error);
+      setLoading(false);
+      if (error.message === 'Failed to fetch') {
+        setGeneralError("Could not connect to the server. Please ensure the backend is running and accessible.");
+      } else {
+        setGeneralError("An unexpected error occurred during login.");
+      }
     }
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center vh-100"
-      style={{ backgroundColor: "#7e5c64" }}
-    >
+    <div className="d-flex align-items-center justify-content-center vh-100" style={{ backgroundColor: "#7e5c64" }}>
       <div className="container text-center">
         <div className="row align-items-center">
           {/* Logo Section */}
           <div className="col-lg-6 mb-5 mb-lg-0">
             <img
-              src="public/Images/logo.png"
+              src="/Images/logo.png"
               alt="Traditional Trend of Rent Logo"
               className="img-fluid mb-4"
               style={{ maxWidth: "300px" }}
@@ -54,37 +92,23 @@ const Login_Form = () => {
 
           {/* Form Section */}
           <div className="col-lg-6">
-            <h2
-              className="mb-4"
-              style={{
-                color: "#541222",
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "3rem",
-              }}
-            >
+            <h2 className="mb-4" style={{ color: "#541222", fontFamily: "'Playfair Display', serif", fontSize: "3rem" }}>
               SIGN IN
             </h2>
-            {errors.general && <p className="text-danger">{errors.general}</p>}
+            {generalError && <p className="text-danger">{generalError}</p>}
             <form onSubmit={handleLogin}>
-              {/* Username Input */}
+              {/* Email Input */}
               <div className="mb-3">
                 <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
+                  type="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
                   className="form-control"
-                  placeholder="USERNAME"
-                  style={{
-                    backgroundColor: "white",
-                    border: "none",
-                    borderRadius: "10px",
-                    fontFamily: "'Playfair Display', serif",
-                    fontWeight: "bold",
-                    color: "#7e5c64",
-                  }}
+                  placeholder="EMAIL"
+                  style={{ backgroundColor: "white", borderRadius: "10px", fontFamily: "'Playfair Display', serif", fontWeight: "bold", color: "#7e5c64" }}
                 />
-                {errors.username && <p className="text-danger">{errors.username}</p>}
+                {errors.email && <p className="text-danger">{errors.email}</p>}
               </div>
 
               {/* Password Input */}
@@ -96,14 +120,7 @@ const Login_Form = () => {
                   onChange={handleChange}
                   className="form-control"
                   placeholder="PASSWORD"
-                  style={{
-                    backgroundColor: "white",
-                    border: "none",
-                    borderRadius: "10px",
-                    fontFamily: "'Playfair Display', serif",
-                    fontWeight: "bold",
-                    color: "#7e5c64",
-                  }}
+                  style={{ backgroundColor: "white", borderRadius: "10px", fontFamily: "'Playfair Display', serif", fontWeight: "bold", color: "#7e5c64" }}
                 />
                 {errors.password && <p className="text-danger">{errors.password}</p>}
               </div>
@@ -112,32 +129,21 @@ const Login_Form = () => {
               <button
                 type="submit"
                 className="btn btn-danger w-100"
-                style={{
-                  backgroundColor: "#541222",
-                  border: "none",
-                  fontFamily: "'Playfair Display', serif",
-                  fontWeight: "bold",
-                  padding: "10px",
-                  borderRadius: "10px",
-                }}
+                style={{ backgroundColor: "#541222", borderRadius: "10px", fontFamily: "'Playfair Display', serif", fontWeight: "bold", padding: "10px" }}
+                disabled={loading}
               >
-                SIGN IN
+                {loading ? "Signing In..." : "SIGN IN"}
               </button>
             </form>
 
             {/* Links */}
             <div className="mt-4 text-light">
               <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem" }}>
-                DO YOU HAVE ANY ACCOUNT?{" "}
-                <Link to="/signup" className="text-warning" style={{ textDecoration: "none" }}>
-                  SIGN UP
-                </Link>
+                DO YOU HAVE ANY ACCOUNT? <Link to="/signup" className="text-warning" style={{ textDecoration: "none" }}>SIGN UP</Link>
               </p>
               <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem" }}>
                 OR <br />
-                <Link to="/ForgetPasswordPage" className="text-warning" style={{ textDecoration: "none" }}>
-                  FORGET PASSWORD?
-                </Link>
+                <Link to="/ForgetPasswordPage" className="text-warning" style={{ textDecoration: "none" }}>FORGET PASSWORD?</Link>
               </p>
             </div>
           </div>
@@ -147,4 +153,4 @@ const Login_Form = () => {
   );
 };
 
-export default Login_Form;
+export default LoginForm;
