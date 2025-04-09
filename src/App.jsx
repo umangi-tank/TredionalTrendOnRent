@@ -30,9 +30,10 @@ import AdminProfile from "./ADMIN/AdminProfile";
 
 function App() {
   return (
-    
+    <div>
+            hello
+
       <Router>
-       
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/OurStory_page" element={<OurStory_page />} />
@@ -62,10 +63,9 @@ function App() {
           <Route path="/UserProfilePage" element={<UserProfilePage/>} />
           <Route path="/EditCollectionPage" element={<EditCollectionPage/>} />
           <Route path="/AdminProfile" element={<AdminProfile/>} />
-
         </Routes>
       </Router>
-    
+    </div>
   );
 }
 
