@@ -6,7 +6,7 @@ function EditCollectionPage()
     return(
         <>
         <AHeader />
-        < EditCollection />
+        <EditCollection />
         <AFooter />
         </>
     )
