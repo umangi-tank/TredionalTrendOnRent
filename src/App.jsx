@@ -31,8 +31,6 @@ import AdminProfile from "./ADMIN/AdminProfile";
 function App() {
   return (
     <div>
-            hello
-
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,6 +1,7 @@
 import AHeader from "./AHeader";
 import AFooter from "./AFooter";
-import AWeDellIn from "./AWeDellIn";
+import Awedellincat from "./Awedellincat";
+
 
 
 function AWeDellInPage()
@@ -8,7 +9,7 @@ function AWeDellInPage()
     return(
         <>
         <AHeader />
-        <AWeDellIn />
+        <Awedellincat />
         <AFooter />
         </>
     )

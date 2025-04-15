@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
+import axios from "axios";
 import Sidebar from "./AdminSidebar";
 
 const AddCollection_page = () => {
@@ -29,7 +30,6 @@ const AddCollection_page = () => {
 
   const validateForm = () => {
     let newErrors = {};
-    
     Object.keys(formData).forEach((key) => {
       if (!formData[key]) {
         newErrors[key] = "This field is required";
@@ -37,14 +37,55 @@ const AddCollection_page = () => {
     });
 
     setErrors(newErrors);
+    console.log("Form validation errors:", newErrors);  // Debugging validation errors
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();  // Prevent form reload
+
+    console.log("Submitting form..."); // Debugging form submission
+    console.log("Form Data Before Submission:", formData); // Log the data before submitting
+
     if (validateForm()) {
-      alert("Form Submitted Successfully!");
-      // Proceed with form submission (e.g., API call)
+      const data = new FormData();
+      for (const key in formData) {
+        data.append(key, formData[key]);
+      }
+
+      try {
+        console.log("Sending API request...");
+        const response = await axios.post("http://localhost:5000/api/collections/add-collection", data);
+        console.log("API Response:", response); // Log the response from the API
+
+        if (response.data.success) {
+          alert("Collection added successfully!");
+        } else {
+          alert("Failed to add collection. Please try again.");
+        }
+
+        // Reset form after submission
+        setFormData({
+          choliName: "",
+          choliType: "",
+          topwearFabric: "",
+          bottomwearFabric: "",
+          dupattaType: "",
+          rentalPrice: "",
+          setType: "",
+          rentalTime: "",
+          setSize: "",
+          image: null,
+        });
+
+        // Optionally reset file input
+        document.querySelector('input[type="file"]').value = "";
+      } catch (err) {
+        console.error("Error during form submission:", err);
+        alert("Failed to submit collection. Please try again.");
+      }
+    } else {
+      console.log("Form validation failed:", errors);  // Log the errors if validation failed
     }
   };
 
@@ -80,7 +121,7 @@ const AddCollection_page = () => {
         <div className="row justify-content-center">
           <div className="col-md-8">
             <form onSubmit={handleSubmit}>
-              {[
+              {[ 
                 { label: "Choli Name", name: "choliName" },
                 { label: "Choli Type", name: "choliType" },
                 { label: "Topwear Fabric Name", name: "topwearFabric" },
@@ -95,6 +136,7 @@ const AddCollection_page = () => {
                   <input
                     type="text"
                     name={name}
+                    value={formData[name]}
                     className={`form-control border border-2 ${errors[name] ? "border-danger" : "border-secondary"}`}
                     placeholder={`Enter ${label}`}
                     onChange={handleChange}

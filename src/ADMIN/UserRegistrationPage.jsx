@@ -1,15 +1,24 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-import Sidebar from "./AdminSidebar"; // Import Sidebar component
+import { useState, useEffect } from "react";
+import Sidebar from "./AdminSidebar";
 
 const UserRegistrationPage = () => {
-  const [users] = useState([
-    { name: "Jay Parmar", email: "jayparmar123@gmail.com", mobile: "+91 12345 69870", password: "jay123" },
-    { name: "Isha Davada", email: "ishadavda67@gmail.com", mobile: "+91 88299 54754", password: "isha123" },
-    { name: "Umangi Tank", email: "umangitank99@gmail.com", mobile: "+91 91739 14714", password: "umuu12014" }
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/users"); // Replace with your backend URL if deployed
+        const data = await res.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="d-flex">
@@ -21,11 +30,11 @@ const UserRegistrationPage = () => {
         {/* Header Section */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold mb-0" style={{ color: "#541222" }}>USER REGISTRATION</h2>
-          
+
           {/* Admin Profile */}
           <div className="position-relative">
             <img
-              src="public\Images\admin_logo.png"
+              src="public/Images/admin_logo.png"
               alt="Admin"
               style={{ width: "40px", height: "40px", borderRadius: "50%", cursor: "pointer" }}
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -63,9 +72,9 @@ const UserRegistrationPage = () => {
             <tbody>
               {users.map((user, index) => (
                 <tr key={index} style={{ borderBottom: "2px solid #541222" }}>
-                  <td className="fw-bold p-3">{user.name}</td>
+                  <td className="fw-bold p-3">{user.username}</td>
                   <td className="p-3">{user.email}</td>
-                  <td className="p-3">{user.mobile}</td>
+                  <td className="p-3">{user.phone}</td>
                   <td className="p-3">
                     {user.password} <i className="bi bi-eye-slash" style={{ cursor: "pointer" }}></i>
                   </td>
