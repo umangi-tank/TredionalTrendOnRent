@@ -16,7 +16,7 @@ const AFooter = () => {
                 <i className="bi bi-google fs-4" style={{ color: "#541222" }}></i>
               </div>
             </div>
-  //import done
+  //import done at everywhere
             {/* Customer Care Section */}
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold" style={{ color: "#541222" }}>
