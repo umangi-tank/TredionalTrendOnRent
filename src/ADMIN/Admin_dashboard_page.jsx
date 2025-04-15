@@ -84,6 +84,11 @@ const AdminDashboard_Page = () => {
                   <td>Nice Collection</td>
                 </tr>
                 <tr>
+                  <td>Disha Patel</td>
+                  <td>dishapatel123@gmail.com</td>
+                  <td>Good Product</td>
+                </tr>
+                <tr>
                   <td>Umangi Tank</td>
                   <td>umangitank99@gmail.com</td>
                   <td>Pretty lehenga with awesome fabric</td>

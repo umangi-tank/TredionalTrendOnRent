@@ -7,7 +7,7 @@ function EventCategoriesPage2()
     return(
         <>
         <AHeader />
-        < EventCard2 />
+        <EventCard2 />
         <AFooter />
         </>
     )

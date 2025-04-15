@@ -12,6 +12,7 @@ const AWeDellIn = () => {
     "/Images/we-4.jpg",
     "/Images/we-5.jpg",
     "/Images/we-6.jpg",
+    
   ];
 
   return (

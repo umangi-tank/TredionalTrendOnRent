@@ -17,5 +17,6 @@ function AfterDashboardPage()
         </>
     )
 }
+//call and export the function
 
 export default AfterDashboardPage;
