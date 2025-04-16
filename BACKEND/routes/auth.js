@@ -1,8 +1,24 @@
+/* eslint-disable no-undef */
 import express from 'express';
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 import User from '../models/User.js';
 
+
 const router = express.Router();
+//// Middleware to protect the route
+const authenticateUser = (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ success: false, message: "Unauthorized" });
+  
+    try {
+      const decoded = jwt.verify(token, "your_secret_key"); // use same key from login
+      req.user = decoded;
+      next();
+    } catch (err) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+  };
 
 // ✅ GET all users route (for UserRegistrationPage)
 router.get('/users', async (req, res) => {
@@ -60,11 +76,36 @@ router.post('/signup', async (req, res) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'Registration successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 });
-
+// Route: PUT /api/users/update
+router.put("/update", authenticateUser, async (req, res) => {
+    try {
+      const { name, email, mobile, password } = req.body;
+      const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+  
+      const updateFields = {
+        ...(name && { name }),
+        ...(email && { email }),
+        ...(mobile && { mobile }),
+        ...(hashedPassword && { password: hashedPassword }),
+      };
+  
+      const updatedUser = await User.findByIdAndUpdate(req.user.id, updateFields, { new: true });
+  
+      if (!updatedUser) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      res.status(200).json({ success: true, message: "Profile updated successfully", user: updatedUser });
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+  
 export default router;

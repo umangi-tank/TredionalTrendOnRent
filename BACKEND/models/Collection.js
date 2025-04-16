@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 const collectionSchema = new mongoose.Schema({
   choliName: String,
   choliType: String,
-  topwear: String,
-  bottomwear: String,
-  dupatta: String,
+  topwearFabric: String,
+  bottomwearFabric: String,
+  dupattaType: String,
+  rentalPrice: Number,
   setType: String,
-  size: String,
-  time: String,
-  price: String,
-  image: String,
+  rentalTime: String,
+  setSize: String,
+  image: String
 });
 
 const Collection = mongoose.model("Collection", collectionSchema);

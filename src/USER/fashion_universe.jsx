@@ -1,26 +1,79 @@
+import { useState } from "react";
+
 const FashionUniverse = () => {
+  const [userNumber, setUserNumber] = useState("");
+  const [userMessage, setUserMessage] = useState("");
+
+  const handleChatClick = async () => {
+    const formattedNumber = userNumber.replace(/\D/g, ""); // Keep only digits
+
+    if (formattedNumber.length < 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    if (userMessage.trim() === "") {
+      alert("Please enter your message.");
+      return;
+    }
+
+    // Send data to backend
+    try {
+      const response = await fetch("http://localhost:5000/api/message/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mobileNumber: formattedNumber,
+          message: userMessage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Sent successfully ✅");
+        setUserNumber("");
+        setUserMessage("");
+      } else {
+        alert("Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to send. Please try again later.");
+    }
+  };
+
   return (
     <div className="container text-center mt-5">
       <p className="fs-5">
-        Welcome to our <strong>TREDITIONAL TREND OF RENT</strong>. Good To See You On Our
-        Fashion World. We are certainly wanting to know you that we do also
-        C2C. If you want to give a particular product on Rent Then just let us
-        know through the WhatsApp number. After that we will put in our website
-        and give customer to rent. We will take your product care That will be
-        in our T&C. We will send you T&C or yours also.
+        Welcome to our <strong>TRADITIONAL TREND OF RENT</strong>. Good to see you in our
+        Fashion World. We also support C2C. If you want to give a product on rent,
+        just let us know. We’ll list your product on our site and handle everything as per T&C.
       </p>
-      <button
-        className="btn btn-lg mt-3"
-        style={{ backgroundColor: "#541222", color: "#fff", border: "none" }}
-        onClick={() =>
-          window.open(
-            "https://wa.me/your-number",
-            "_blank"
-          )
-        }
-      >
-        CHAT ON WHATSAPP
-      </button>
+
+      <div className="mt-4" style={{ maxWidth: "400px", margin: "0 auto" }}>
+        <input
+          type="text"
+          className="form-control mb-2"
+          placeholder="Enter your mobile number"
+          value={userNumber}
+          onChange={(e) => setUserNumber(e.target.value)}
+        />
+        <textarea
+          className="form-control mb-2"
+          placeholder="Enter your message"
+          rows={3}
+          value={userMessage}
+          onChange={(e) => setUserMessage(e.target.value)}
+        ></textarea>
+        <button
+          className="btn btn-lg"
+          style={{ backgroundColor: "#541222", color: "#fff", border: "none" }}
+          onClick={handleChatClick}
+        >
+          CHAT ON OWNER
+        </button>
+      </div>
     </div>
   );
 };

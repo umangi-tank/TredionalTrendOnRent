@@ -1,17 +1,16 @@
 import { useState } from "react";
+import axios from "axios";
 
 const BookingCollection = () => {
   const [formData, setFormData] = useState({
     choliName: "",
-    choliTypes: "",
-    topwearFabric: "",
-    bottomwearFabric: "",
-    dupattaType: "",
-    rentalPrice: "",
-    setType: "",
+    date: "",
     duration: "",
-    setSize: "",
-    file: null,
+    startingHour: "",
+    contactNumber: "",
+    yourName: "",
+    emailAddress: "",
+    yourAddress: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -19,10 +18,6 @@ const BookingCollection = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, file: e.target.files[0] });
   };
 
   const validateForm = () => {
@@ -37,24 +32,27 @@ const BookingCollection = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Booking successfully!");
-      console.log("Form Data:", formData);
-      setFormData({
-        choliName: "",
-        choliTypes: "",
-        topwearFabric: "",
-        bottomwearFabric: "",
-        dupattaType: "",
-        rentalPrice: "",
-        setType: "",
-        duration: "",
-        setSize: "",
-        file: null,
-      });
-      setErrors({});
+      try {
+        await axios.post("http://localhost:5000/api/book", formData);
+        alert("Booking submitted successfully!");
+        setFormData({
+          choliName: "",
+          date: "",
+          duration: "",
+          startingHour: "",
+          contactNumber: "",
+          yourName: "",
+          emailAddress: "",
+          yourAddress: "",
+        });
+        setErrors({});
+      } catch (error) {
+        alert("Failed to submit booking!");
+        console.error(error);
+      }
     }
   };
 
@@ -66,18 +64,17 @@ const BookingCollection = () => {
       <form className="row g-3" onSubmit={handleSubmit}>
         {[
           { name: "choliName", placeholder: "Choli Name" },
-          { name: "choliTypes", placeholder: "Choli Types" },
-          { name: "topwearFabric", placeholder: "Topwear Fabric Name" },
-          { name: "bottomwearFabric", placeholder: "Bottomwear Fabric Name" },
-          { name: "dupattaType", placeholder: "Dupatta Type Name" },
-          { name: "rentalPrice", placeholder: "Set Rental Prices" },
-          { name: "setType", placeholder: "Set Type" },
+          { name: "date", placeholder: "Booking Date", type: "date" },
           { name: "duration", placeholder: "How Much Time" },
-          { name: "setSize", placeholder: "Set Size" },
-        ].map(({ name, placeholder }, index) => (
+          { name: "startingHour", placeholder: "Starting Hour", type: "time" },
+          { name: "contactNumber", placeholder: "Contact Number" },
+          { name: "yourName", placeholder: "Your Name" },
+          { name: "emailAddress", placeholder: "Email Address", type: "email" },
+          { name: "yourAddress", placeholder: "Your Address" },
+        ].map(({ name, placeholder, type = "text" }, index) => (
           <div className="col-md-12" key={index}>
             <input
-              type="text"
+              type={type}
               name={name}
               value={formData[name]}
               onChange={handleChange}
@@ -87,15 +84,6 @@ const BookingCollection = () => {
             {errors[name] && <div className="text-danger">{errors[name]}</div>}
           </div>
         ))}
-
-        <div className="col-md-12">
-          <input
-            type="file"
-            className={`form-control border ${errors.file ? "border-danger" : "border-dark"}`}
-            onChange={handleFileChange}
-          />
-          {errors.file && <div className="text-danger">{errors.file}</div>}
-        </div>
 
         <div className="col-md-12 text-center">
           <button type="submit" className="btn" style={{ backgroundColor: "#541222", color: "white" }}>

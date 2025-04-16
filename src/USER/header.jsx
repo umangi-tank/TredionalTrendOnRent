@@ -59,7 +59,7 @@ const Header = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/Contact_us" style={{ color: themeColor, fontFamily: "Playfair Display, serif" }}>
+              <a className="nav-link" href="/Contact_us_page" style={{ color: themeColor, fontFamily: "Playfair Display, serif" }}>
                 CONTACT US
               </a>
             </li>

@@ -1,9 +1,24 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-import Sidebar from "./AdminSidebar"; // Import the Sidebar component
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Sidebar from "./AdminSidebar"; // Import Sidebar component
 
 const AdminDashboard_Page = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [reviews, setReviews] = useState([]); // State to store reviews
+
+  // Fetch reviews from the backend when the component mounts
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/reviews/reviews"); // Backend API endpoint
+        setReviews(response.data); // Set fetched reviews in the state
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, []); // Empty dependency array means this runs only once when the component mounts
 
   return (
     <div className="d-flex">
@@ -12,7 +27,7 @@ const AdminDashboard_Page = () => {
 
       {/* Main Content */}
       <div className="container-fluid p-4" style={{ marginLeft: "250px", width: "calc(100% - 250px)" }}>
-        {/* Header Section (Styled like User Registration Page) */}
+        {/* Header Section */}
         <div className="d-flex justify-content-between align-items-center pb-3 border-bottom">
           <h2 className="fw-bold" style={{ color: "#541222" }}>DASHBOARD</h2>
 
@@ -78,21 +93,19 @@ const AdminDashboard_Page = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Isha Davda</td>
-                  <td>ishadavda123@gmail.com</td>
-                  <td>Nice Collection</td>
-                </tr>
-                <tr>
-                  <td>Disha Patel</td>
-                  <td>dishapatel123@gmail.com</td>
-                  <td>Good Product</td>
-                </tr>
-                <tr>
-                  <td>Umangi Tank</td>
-                  <td>umangitank99@gmail.com</td>
-                  <td>Pretty lehenga with awesome fabric</td>
-                </tr>
+                {reviews.length > 0 ? (
+                  reviews.map((review) => (
+                    <tr key={review._id}>
+                      <td>{review.name}</td>
+                      <td>{review.email}</td>
+                      <td>{review.message}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="text-center">No reviews available</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

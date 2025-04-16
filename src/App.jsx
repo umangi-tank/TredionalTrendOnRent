@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./USER/Home_page";
 import OurStory_page from "./USER/OurStory_page";
 import Our_team_page from "./USER/Our_team_page";
-import Contact_us from "./USER/Contact_us_page";
+import Contact_us_page from "./USER/Contact_us_page";
 import Login_page from "./USER/Login_page";
 import OurStory_description from "./USER/Our_story_description";
 import Admin_login from "./ADMIN/admin_login";
@@ -28,6 +28,7 @@ import UserProfilePage from "./AFTERLOGIN/UserProfilePage";
 import EditCollectionPage from "./AFTERLOGIN/EditCollectionPage";
 import AdminProfile from "./ADMIN/AdminProfile";
 
+
 function App() {
   return (
     <div>
@@ -37,7 +38,7 @@ function App() {
           <Route path="/OurStory_page" element={<OurStory_page />} />
           <Route path="/Login_page" element={<Login_page />} />
           <Route path="/Our_team_page" element={<Our_team_page/>} />
-          <Route path="/Contact_us" element={<Contact_us/>} />
+          <Route path="/Contact_us_page" element={<Contact_us_page/>} />
           <Route path="Our_story_description" element={<OurStory_description/>} />
           <Route path="/admin_login" element={<Admin_login />}/>
           <Route path="/signup" element={<Signup />} />
@@ -61,6 +62,8 @@ function App() {
           <Route path="/UserProfilePage" element={<UserProfilePage/>} />
           <Route path="/EditCollectionPage" element={<EditCollectionPage/>} />
           <Route path="/AdminProfile" element={<AdminProfile/>} />
+          
+
         </Routes>
       </Router>
     </div>

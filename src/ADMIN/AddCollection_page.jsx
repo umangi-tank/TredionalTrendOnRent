@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import axios from "axios";
 import Sidebar from "./AdminSidebar";
@@ -18,7 +17,6 @@ const AddCollection_page = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -29,95 +27,82 @@ const AddCollection_page = () => {
   };
 
   const validateForm = () => {
-    let newErrors = {};
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newErrors[key] = "This field is required";
-      }
-    });
+    const newErrors = {};
+    if (!formData.choliName) newErrors.choliName = "Choli Name is required";
+    if (!formData.choliType) newErrors.choliType = "Choli Type is required";
+    if (!formData.topwearFabric) newErrors.topwearFabric = "Topwear Fabric is required";
+    if (!formData.bottomwearFabric) newErrors.bottomwearFabric = "Bottomwear Fabric is required";
+    if (!formData.dupattaType) newErrors.dupattaType = "Dupatta Type is required";
+    if (!formData.rentalPrice) newErrors.rentalPrice = "Rental Price is required";
+    if (!formData.setType) newErrors.setType = "Set Type is required";
+    if (!formData.rentalTime) newErrors.rentalTime = "Rental Time is required";
+    if (!formData.setSize) newErrors.setSize = "Set Size is required";
+    if (!formData.image) newErrors.image = "Image is required";
 
     setErrors(newErrors);
-    console.log("Form validation errors:", newErrors);  // Debugging validation errors
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent form reload
-
-    console.log("Submitting form..."); // Debugging form submission
-    console.log("Form Data Before Submission:", formData); // Log the data before submitting
+    e.preventDefault();
 
     if (validateForm()) {
       const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
+      data.append("choliName", formData.choliName);
+      data.append("choliType", formData.choliType);
+      data.append("topwearFabric", formData.topwearFabric);
+      data.append("bottomwearFabric", formData.bottomwearFabric);
+      data.append("dupattaType", formData.dupattaType);
+      data.append("rentalPrice", formData.rentalPrice);
+      data.append("setType", formData.setType);
+      data.append("rentalTime", formData.rentalTime);
+      data.append("setSize", formData.setSize);
+      data.append("image", formData.image); // file
 
       try {
-        console.log("Sending API request...");
-        const response = await axios.post("http://localhost:5000/api/collections/add-collection", data);
-        console.log("API Response:", response); // Log the response from the API
+        const response = await axios.post(
+          "http://localhost:5000/api/collections/add-collection",
+          data
+        );
 
         if (response.data.success) {
           alert("Collection added successfully!");
+
+          // Reset form
+          setFormData({
+            choliName: "",
+            choliType: "",
+            topwearFabric: "",
+            bottomwearFabric: "",
+            dupattaType: "",
+            rentalPrice: "",
+            setType: "",
+            rentalTime: "",
+            setSize: "",
+            image: null,
+          });
+          document.querySelector('input[type="file"]').value = "";
         } else {
-          alert("Failed to add collection. Please try again.");
+          alert("Failed to add collection.");
         }
-
-        // Reset form after submission
-        setFormData({
-          choliName: "",
-          choliType: "",
-          topwearFabric: "",
-          bottomwearFabric: "",
-          dupattaType: "",
-          rentalPrice: "",
-          setType: "",
-          rentalTime: "",
-          setSize: "",
-          image: null,
-        });
-
-        // Optionally reset file input
-        document.querySelector('input[type="file"]').value = "";
-      } catch (err) {
-        console.error("Error during form submission:", err);
-        alert("Failed to submit collection. Please try again.");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Error submitting form");
       }
-    } else {
-      console.log("Form validation failed:", errors);  // Log the errors if validation failed
     }
   };
 
   return (
     <div className="d-flex">
-      {/* ✅ Sidebar Component */}
+      {/* Sidebar Component */}
       <Sidebar />
 
       {/* Main Content */}
       <div className="container-fluid p-5" style={{ fontFamily: "Playfair Display, serif", marginLeft: "250px" }}>
-        {/* Top Navbar */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold mb-0" style={{ color: "#541222" }}>ADD NEW COLLECTION</h2>
-
-          <div className="position-relative">
-            <img
-              src="public/images/admin_logo.png"
-              alt="Admin"
-              style={{ width: "40px", height: "40px", borderRadius: "50%", cursor: "pointer" }}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            />
-            {dropdownOpen && (
-              <div className="bg-white text-dark rounded shadow mt-2 p-2 position-absolute" style={{ right: "0px", top: "50px", width: "150px", zIndex: "1000" }}>
-                <a href="/AdminProfile" className="d-block text-decoration-none text-dark p-2">View Profile</a>
-                <hr className="my-2" />
-                <a href="/Admin_login" className="d-block text-decoration-none text-danger p-2">Sign Out</a>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Main Form */}
         <div className="row justify-content-center">
           <div className="col-md-8">
             <form onSubmit={handleSubmit}>
@@ -172,3 +157,4 @@ const AddCollection_page = () => {
 };
 
 export default AddCollection_page;
+

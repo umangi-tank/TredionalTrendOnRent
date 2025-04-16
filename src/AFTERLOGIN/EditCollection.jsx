@@ -1,110 +1,93 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const EditCollection = () => {
+const EditCollectionPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const booking = location.state;
+
   const [formData, setFormData] = useState({
+    yourName: "",
+    emailAddress: "",
+    contactNumber: "",
     choliName: "",
-    choliTypes: "",
-    topwearFabric: "",
-    bottomwearFabric: "",
-    dupattaType: "",
-    rentalPrice: "",
-    setType: "",
+    date: "",
     duration: "",
-    setSize: "",
-    file: null,
+    startingHour: "",
   });
 
-  const [errors, setErrors] = useState({});
+  // Pre-fill the form with booking data
+  useEffect(() => {
+    if (booking) {
+      setFormData({
+        yourName: booking.yourName || "",
+        emailAddress: booking.emailAddress || "",
+        contactNumber: booking.contactNumber || "",
+        choliName: booking.choliName || "",
+        date: booking.date || "",
+        duration: booking.duration || "",
+        startingHour: booking.startingHour || "",
+      });
+    }
+  }, [booking]);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, file: e.target.files[0] });
-  };
-
-  const validateForm = () => {
-    let newErrors = {};
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newErrors[key] = "This field is required";
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      alert("Updated successfully!");
-      console.log("Form Data:", formData);
-      setFormData({
-        choliName: "",
-        choliTypes: "",
-        topwearFabric: "",
-        bottomwearFabric: "",
-        dupattaType: "",
-        rentalPrice: "",
-        setType: "",
-        duration: "",
-        setSize: "",
-        file: null,
-      });
-      setErrors({});
+    console.log("Form Data:", formData);
+    console.log("Booking ID:", booking._id);
+  
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/bookings/${booking._id}`, 
+        formData
+      );
+  
+      if (response.status === 200) {
+        alert("Booking updated successfully!");
+        navigate("/MyBookingPage");
+      }
+    } catch (err) {
+      console.error("Error updating booking:", err);
+      alert("Failed to update booking.");
     }
   };
-
   return (
-    <div className="container py-5">
-      <h4 className="text-center py-2" style={{ backgroundColor: "#541222", color: "white" }}>
-        EDIT COLLECTION
+    <div className="container mt-4">
+      <h4 className="text-center py-2" style={{ backgroundColor: "#9B767C", color: "white" }}>
+        EDIT BOOKING
       </h4>
-      <form className="row g-3" onSubmit={handleSubmit}>
-        {[
-          { name: "choliName", placeholder: "Choli Name" },
-          { name: "choliTypes", placeholder: "Choli Types" },
-          { name: "topwearFabric", placeholder: "Topwear Fabric Name" },
-          { name: "bottomwearFabric", placeholder: "Bottomwear Fabric Name" },
-          { name: "dupattaType", placeholder: "Dupatta Type Name" },
-          { name: "rentalPrice", placeholder: "Set Rental Prices" },
-          { name: "setType", placeholder: "Set Type" },
-          { name: "duration", placeholder: "How Much Time" },
-          { name: "setSize", placeholder: "Set Size" },
-        ].map(({ name, placeholder }, index) => (
-          <div className="col-md-12" key={index}>
+      <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+        {["yourName", "emailAddress", "contactNumber", "choliName", "date", "duration", "startingHour"].map((field) => (
+          <div className="mb-3" key={field}>
+            <label className="form-label">{field.replace(/([A-Z])/g, " $1")}</label>
             <input
-              type="text"
-              name={name}
-              value={formData[name]}
+              type={field === "date" ? "date" : "text"}
+              className="form-control"
+              name={field}
+              value={formData[field]}
               onChange={handleChange}
-              className={`form-control border ${errors[name] ? "border-danger" : "border-dark"}`}
-              placeholder={`Enter ${placeholder}`}
+              required
             />
-            {errors[name] && <div className="text-danger">{errors[name]}</div>}
           </div>
         ))}
-
-        <div className="col-md-12">
-          <input
-            type="file"
-            className={`form-control border ${errors.file ? "border-danger" : "border-dark"}`}
-            onChange={handleFileChange}
-          />
-          {errors.file && <div className="text-danger">{errors.file}</div>}
-        </div>
-
-        <div className="col-md-12 text-center">
-          <button type="submit" className="btn" style={{ backgroundColor: "#541222", color: "white" }}>
-            EDIT COLLECTION
-          </button>
-        </div>
+        <button type="submit" className="btn btn-primary w-100">
+          Update Booking
+        </button>
       </form>
     </div>
   );
 };
 
-export default EditCollection;
+export default EditCollectionPage;
