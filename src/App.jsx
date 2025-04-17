@@ -27,7 +27,7 @@ import CategoriesBookingPage from "./AFTERLOGIN/CategoriesBookingPage";
 import UserProfilePage from "./AFTERLOGIN/UserProfilePage";
 import EditCollectionPage from "./AFTERLOGIN/EditCollectionPage";
 import AdminProfile from "./ADMIN/AdminProfile";
-
+import PaymentPage from "./AFTERLOGIN/paymentPage";
 
 function App() {
   return (
@@ -62,6 +62,7 @@ function App() {
           <Route path="/UserProfilePage" element={<UserProfilePage/>} />
           <Route path="/EditCollectionPage" element={<EditCollectionPage/>} />
           <Route path="/AdminProfile" element={<AdminProfile/>} />
+          <Route path="/PaymentPage" element={<PaymentPage/>}/>
           
 
         </Routes>

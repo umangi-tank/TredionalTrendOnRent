@@ -1,13 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import Sidebar from "./AdminSidebar"; // Sidebar Component
-import axios from "axios"; // Import axios for making HTTP requests
+import Sidebar from "./AdminSidebar";
+import axios from "axios";
 
 const ManageCollectionPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [collections, setCollections] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null); // Store the item being edited
+  const [currentItem, setCurrentItem] = useState(null);
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -35,13 +35,11 @@ const ManageCollectionPage = () => {
     };
   }, []);
 
-  // Handle the Edit button functionality
   const handleEdit = (item) => {
     setCurrentItem(item);
     setEditMode(true);
   };
 
-  // Handle the Delete button functionality
   const handleDelete = async (itemId) => {
     if (window.confirm("Are you sure you want to delete this collection?")) {
       try {
@@ -57,7 +55,6 @@ const ManageCollectionPage = () => {
     }
   };
 
-  // Handle saving the edited collection
   const handleSave = async () => {
     try {
       const updatedItem = await axios.put(
@@ -88,7 +85,6 @@ const ManageCollectionPage = () => {
         className="container-fluid p-4"
         style={{ fontFamily: "Playfair Display, serif", marginLeft: "250px" }}
       >
-        {/* Header */}
         <div
           className="d-flex justify-content-between align-items-center border-bottom pb-2 position-fixed bg-white px-4"
           style={{ top: 0, left: 250, width: "calc(100% - 250px)", zIndex: 1050 }}
@@ -135,7 +131,6 @@ const ManageCollectionPage = () => {
           </div>
         </div>
 
-        {/* Table */}
         <div className="table-responsive mt-5 pt-4">
           <table
             className="table table-bordered text-center"
@@ -158,49 +153,53 @@ const ManageCollectionPage = () => {
             </thead>
             <tbody>
               {collections.length > 0 ? (
-                collections.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <img
-                        src={item.image}
-                        alt="choli"
-                        style={{
-                          width: "80px",
-                          height: "80px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </td>
-                    <td>{item.choliName}</td>
-                    <td>{item.choliType}</td>
-                    <td>{item.topwearFabric}</td>
-                    <td>{item.bottomwearFabric}</td>
-                    <td>{item.dupattaType}</td>
-                    <td>{item.setType}</td>
-                    <td>{item.setSize}</td>
-                    <td>{item.rentalTime}</td>
-                    <td
-                      className="fw-bold"
-                      style={{ backgroundColor: "#333", color: "#fff" }}
-                    >
-                      ₹{item.rentalPrice}
-                    </td>
-                    <td className="d-flex justify-content-center gap-2">
-                      <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => handleEdit(item)}
+                collections.map((item, index) => {
+                  console.log("Image path:", item.image); // ✅ Debugging log
+
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <img
+                          src={`http://localhost:5000/uploads/${item.image}`}
+                          alt="choli"
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </td>
+                      <td>{item.choliName}</td>
+                      <td>{item.choliType}</td>
+                      <td>{item.topwearFabric}</td>
+                      <td>{item.bottomwearFabric}</td>
+                      <td>{item.dupattaType}</td>
+                      <td>{item.setType}</td>
+                      <td>{item.setSize}</td>
+                      <td>{item.rentalTime}</td>
+                      <td
+                        className="fw-bold"
+                        style={{ backgroundColor: "#333", color: "#fff" }}
                       >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDelete(item._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                        ₹{item.rentalPrice}
+                      </td>
+                      <td className="d-flex justify-content-center gap-2">
+                        <button
+                          className="btn btn-warning btn-sm"
+                          onClick={() => handleEdit(item)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelete(item._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="11" className="text-center">
@@ -212,7 +211,6 @@ const ManageCollectionPage = () => {
           </table>
         </div>
 
-        {/* Edit Modal or Form */}
         {editMode && (
           <div className="modal show" style={{ display: "block" }}>
             <div className="modal-dialog">
@@ -310,10 +308,7 @@ const ManageCollectionPage = () => {
                     />
                   </div>
                   <div className="text-center">
-                    <button
-                      className="btn btn-primary"
-                      onClick={handleSave}
-                    >
+                    <button className="btn btn-primary" onClick={handleSave}>
                       Save Changes
                     </button>
                   </div>

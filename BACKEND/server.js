@@ -11,6 +11,8 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import profileRoutes from './routes/profileRoute.js';
 import reviewRoute from './routes/reviewRoute.js';
 import messageRoute from "./routes/messageRoute.js";
+import forgetPasswordRoute from './routes/forgetPasswordRoute.js'; 
+import paymentRoute from './routes/paymentRoute.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -40,6 +42,10 @@ app.use("/api", bookingRoutes); //booking- collection
 app.use('/api/profile', profileRoutes);  // profile
 app.use('/api/reviews', reviewRoute);
 app.use("/api/message", messageRoute);
+app.use('/api/forgot-password', forgetPasswordRoute);
+app.use('/uploads', express.static('uploads'));
+app.use('/payment', paymentRoute);
+
 
 
 

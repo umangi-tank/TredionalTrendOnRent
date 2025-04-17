@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const EditCollectionPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const booking = location.state;
+  const booking = location.state; // booking data passed via react-router
 
   const [formData, setFormData] = useState({
     yourName: "",
@@ -46,23 +46,24 @@ const EditCollectionPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    console.log("Booking ID:", booking._id);
+    console.log("Booking ID:", booking._id); // Make sure the bookingId is available from state
   
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/bookings/${booking._id}`, 
+        `http://localhost:5000/api/bookings/edit/${booking._id}`,  // Use the bookingId in the URL
         formData
       );
   
       if (response.status === 200) {
         alert("Booking updated successfully!");
-        navigate("/MyBookingPage");
+        navigate("/MyBookingPage"); // Navigate back after success
       }
     } catch (err) {
       console.error("Error updating booking:", err);
       alert("Failed to update booking.");
     }
   };
+
   return (
     <div className="container mt-4">
       <h4 className="text-center py-2" style={{ backgroundColor: "#9B767C", color: "white" }}>

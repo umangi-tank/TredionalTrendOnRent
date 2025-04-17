@@ -63,19 +63,19 @@ const AdminDashboard_Page = () => {
           <div className="row text-center">
             <div className="col-md-4 p-3">
               <div className="p-4 rounded shadow" style={{ backgroundColor: "#f8d7da" }}>
-                <h1 className="text-danger">4</h1>
+                <h1 className="text-danger">5</h1>
                 <p className="fw-bold">Total Booking</p>
               </div>
             </div>
             <div className="col-md-4 p-3">
               <div className="p-4 rounded shadow" style={{ backgroundColor: "#cce5ff" }}>
-                <h1 className="text-primary">6</h1>
-                <p className="fw-bold">Total Collection</p>
+                <h1 className="text-primary">5</h1>
+                <p className="fw-bold">Recently Add Collection</p>
               </div>
             </div>
             <div className="col-md-4 p-3">
               <div className="p-4 rounded shadow" style={{ backgroundColor: "#d4edda" }}>
-                <h1 className="text-success">2</h1>
+                <h1 className="text-success">1</h1>
                 <p className="fw-bold">Recently Registered</p>
               </div>
             </div>
