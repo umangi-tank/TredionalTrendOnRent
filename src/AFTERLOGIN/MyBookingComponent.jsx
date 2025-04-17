@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaEdit, FaTrash, FaMoneyBillAlt } from "react-icons/fa"; // Add FaMoneyBillAlt for the payment icon
+import { FaEdit, FaTrash, FaMoneyBillAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,8 +8,10 @@ const MyBookingComponent = () => {
   const navigate = useNavigate();
   const [bookingData, setBookingData] = useState([]);
 
+  // Fetch all bookings
   const fetchBookings = () => {
-    axios.get("http://localhost:5000/api/bookings")
+    axios
+      .get("http://localhost:5000/api/bookings")
       .then((res) => setBookingData(res.data))
       .catch((err) => console.error("Error fetching bookings:", err));
   };
@@ -18,25 +20,26 @@ const MyBookingComponent = () => {
     fetchBookings();
   }, []);
 
+  // DELETE single booking by ID
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/bookings/${id}`);
       if (response.status === 200) {
         alert("Booking deleted successfully!");
-        // Optional: refresh the list after delete
-        fetchBookings(); // Fetch bookings again after delete
+        fetchBookings();
       }
     } catch (error) {
       console.error("Delete error:", error);
-      alert("Failed to delete booking.");
+      alert("Error deleting booking");
     }
   };
 
-  const handlePayment = (id) => {
-    // Replace this with the actual payment handling logic
-    console.log("Proceed to payment for booking ID:", id);
-    // You can redirect to a payment page or trigger the payment process here
-    navigate(`/payment/${id}`); // Example navigation to a payment page for the booking
+  const handlePayment = () => {
+    navigate(`/paymentPage`);
+  };
+
+  const handleEdit = (booking) => {
+    navigate("/EditCollectionPage", { state: booking });
   };
 
   return (
@@ -74,7 +77,7 @@ const MyBookingComponent = () => {
                 <td>
                   <button
                     className="btn btn-sm btn-warning me-2"
-                    onClick={() => navigate("/EditCollectionPage", { state: booking })}
+                    onClick={() => handleEdit(booking)}
                   >
                     <FaEdit />
                   </button>
@@ -86,7 +89,7 @@ const MyBookingComponent = () => {
                   </button>
                   <button
                     className="btn btn-sm btn-success"
-                    onClick={() => handlePayment(booking._id)} // Trigger payment action
+                    onClick={() => handlePayment(booking._id)}
                   >
                     <FaMoneyBillAlt />
                   </button>

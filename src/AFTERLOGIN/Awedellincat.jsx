@@ -22,10 +22,9 @@ const Awedellincat = () => {
     fetchCollections();
   }, []);
 
-  // Handle click for the heart button
   const handleWishlistClick = () => {
     alert("Added to Wishlists");
-    navigate("/WhishListPage");  // Navigate to the wishlist page
+    navigate("/WhishListPage");
   };
 
   return (
@@ -38,7 +37,17 @@ const Awedellincat = () => {
         <Card className="mb-3" key={index}>
           <div className="row g-0 align-items-center">
             <div className="col-md-4">
-              <img src={event.image} className="img-fluid rounded-start" alt="Event" />
+              <img
+                src={`http://localhost:5000/uploads/${event.image}`}
+                className="img-fluid rounded-start"
+                alt="Event"
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover", // ensures image fills box without distortion
+                  borderRadius: "10px 0 0 10px",
+                }}
+              />
             </div>
             <div className="col-md-8">
               <Card.Body>
@@ -57,7 +66,10 @@ const Awedellincat = () => {
                   <button className="btn btn-outline-danger" onClick={handleWishlistClick}>
                     <FaHeart />
                   </button>
-                  <button className="btn btn-outline-secondary" onClick={() => navigate("/CategoriesBookingPage")}>
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={() => navigate("/CategoriesBookingPage")}
+                  >
                     <FaLock />
                   </button>
                 </div>
