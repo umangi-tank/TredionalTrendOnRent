@@ -18,7 +18,7 @@ const AdminDashboard_Page = () => {
     };
 
     fetchReviews();
-  }, []); // Empty dependency array means this runs only once when the component mounts
+  }, []); //Empty dependency array means this runs only once when the component mounts
 
   return (
     <div className="d-flex">
