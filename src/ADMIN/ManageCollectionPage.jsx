@@ -224,7 +224,7 @@ const ManageCollectionPage = () => {
                     className="close"
                     onClick={() => setEditMode(false)}
                   >
-                    ×
+                    
                   </button>
                 </div>
                 <div className="modal-body">
